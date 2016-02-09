@@ -4,6 +4,11 @@
 public class cell {
 	
 	dataStructure[][] grid;
+	int start_x = 0;
+	int start_y = 0;
+	int end_x = 0;
+	int end_y = 0;
+	
 	public cell(int n){
 		grid = new dataStructure[n][n];
 		initialize_grid();
