@@ -9,5 +9,5 @@
 public class dataStructure {
 	boolean visited = false;
 	boolean blocked = false;
-	char value = 'x';
+	char value = '0';
 }

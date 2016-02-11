@@ -20,12 +20,14 @@ public class cell {
 			}
 		}
 	}
-	public void print(){
+	public String print(){
+		String ret = "";
 		for(int i =0; i<grid.length;i++){
 			for(int j=0 ; j<grid[i].length; j++){
-				System.out.print(grid[i][j].value + " " );
+				ret= ret + grid[i][j].value + " ";
 			}
-			System.out.println();
+			ret = ret + "\n";
 		}
+		return ret;
 	}
 }

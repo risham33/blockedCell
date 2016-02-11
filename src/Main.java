@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 public class Main {
 	static dataStructure[][] grid;
 	/*
@@ -42,7 +46,7 @@ public class Main {
 
 			if (((int) Math.floor(Math.random() * 101)) <= 30) {
 				grid[x][y].blocked = true;
-				grid[x][y].value = 'O';
+				grid[x][y].value = '1';
 			}
 		}
 
@@ -72,7 +76,7 @@ public class Main {
 			list[i].end_x = x;
 			list[i].end_y = y;
 			// changing the value of the end point in the grid
-			list[i].grid[x][y].value = 'E';
+			list[i].grid[x][y].value = 'T';
 			list[i].grid[x][y].visited = true;
 			// if x, y picked is the one which is starting or ending point, so
 			// pick another one
@@ -89,9 +93,28 @@ public class Main {
 			 * TO PRINT OUT THE CELL WHICH WAS CREATED!!!!!!, YOU CAN GET RID OF
 			 * THIS IF YOU WOULD LIKE
 			 */
-			list[i].print();
-			System.out
-					.println("---------------------------------------------------------");
+			//list[i].print();
+			BufferedWriter writer = null;
+	        try {
+	            //create a temporary file
+	            String name = "temp"+i;
+	            File logFile = new File(name);
+
+	            // This will output the full path where the file will be written to...
+	            System.out.println(logFile.getCanonicalPath());
+
+	            writer = new BufferedWriter(new FileWriter(logFile));
+	            writer.write(list[i].print());
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                // Close the writer regardless of what happens...
+	                writer.close();
+	            } catch (Exception e) {
+	            }
+	        }
+			System.out.println("---------------------------------------------------------");
 		}
 
 	}
