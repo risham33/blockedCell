@@ -69,7 +69,7 @@ public class Main {
 			list[i].start_x = x;
 			list[i].start_y = y;
 			// changing the value of the start point in the grid
-			list[i].grid[x][y].value = 'S';
+			list[i].grid[x][y].value = 'A';
 			list[i].grid[x][y].visited = true;
 			x = (int) Math.floor(Math.random() * list[i].grid.length);
 			y = (int) Math.floor(Math.random() * list[i].grid[0].length);
