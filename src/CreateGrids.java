@@ -2,8 +2,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-public class Main {
-	static dataStructure[][] grid;
+public class CreateGrids {
+	static Cell[][] grid;
 	/*
 	 * Method is used to initialize the grid as being blocked or not blocked, 
 	 * it is called from main method
@@ -55,11 +55,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		// its the list of all the 50 maps that we have
-		cell[] list = new cell[50];
+		Maze[] list = new Maze[50];
 		// creating those cells and initializing their grids
 		for (int i = 0; i < list.length; i++) {
 			
-			list[i] = new cell(101); // THE SIZE OF 2D ARRAY
+			list[i] = new Maze(101); // THE SIZE OF 2D ARRAY
 
 			/*
 			 * RANDOMLY GET THE START AND END POINT OF THE MAP

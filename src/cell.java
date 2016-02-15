@@ -1,33 +1,13 @@
 /*
- * THIS CLASS WOULD BE USED TO HOLD THE GENERATED 2D ARRAY OF THE dataStructure object
+ * THIS CLASS WOULD BE THE OBJECT CLASS OF THE WHOLE ENTIRE PROGRAM, WHICH WOULD CONTAIN IF THE 
+ * FOLLOWING BLOCK IS VISITED OR NOT
+ * IF THE OBJECT IS BLOCKED THEN THE VALUE OF THAT OBJECT WOULD BE CHANGED TO '1', IF IT IS NOT BLOCKED
+ * THEN IT WOULD BE '0' 
+ * If it is the start point, then it would be changed to A and then if it is an end point then it would 
+ * changed to T
  */
-public class cell {
-	
-	dataStructure[][] grid;
-	int start_x = 0;
-	int start_y = 0;
-	int end_x = 0;
-	int end_y = 0;
-	
-	public cell(int n){
-		grid = new dataStructure[n][n];
-		initialize_grid();
-	}
-	public void initialize_grid(){
-		for(int i =0; i<grid.length;i++){
-			for(int j=0 ; j<grid[i].length; j++){
-				grid[i][j] = new dataStructure();
-			}
-		}
-	}
-	public String print(){
-		String ret = "";
-		for(int i =0; i<grid.length;i++){
-			for(int j=0 ; j<grid[i].length; j++){
-				ret= ret + grid[i][j].value + " ";
-			}
-			ret = ret + "\n";
-		}
-		return ret;
-	}
+public class Cell {
+	boolean visited = false;
+	boolean blocked = false;
+	char value = '0';
 }
