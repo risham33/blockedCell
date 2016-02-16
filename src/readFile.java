@@ -27,7 +27,7 @@ public class readFile{
 		    	x++; //the x value increase
 		    	
 		    }
-		    System.out.println(map.print()); //printout of the map
+		    System.out.println(map.toString()); //printout of the map
 		    
 		}
 		catch(Exception e){

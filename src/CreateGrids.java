@@ -104,7 +104,7 @@ public class CreateGrids {
 	            System.out.println(logFile.getCanonicalPath());
 
 	            writer = new BufferedWriter(new FileWriter(logFile));
-	            writer.write(list[i].print());
+	            writer.write(list[i].toString());
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        } finally {
