@@ -5,12 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Scanner;
-/**
+import java.util.Stack;
+/*
  * Sangini Shah (sms591) and Risham Chokshi (ryc19)
  * 
- * Implementation of Repeated Backward A* 
+ * Implementation of Adaptive A* 
  */
-public class RepeatedBackwardAStar {
+public class AdaptiveAStar {
 	
 	public static void main(String[] args) {
 		Maze map = null; //map being searched
@@ -78,8 +79,8 @@ public class RepeatedBackwardAStar {
 	}
 	
 	/**
-	 * Driver method that runs A* with different goal states depending on the path returned by computePath(). 
-	 * Initially begins with the start position being the goal in the map. Outputs whether or not there is a solution for the Maze, and if there
+	 * Driver method that runs A* with different start states depending on the path returned by computePath(). 
+	 * Initially begins with the start position in the map. Outputs whether or not there is a solution for the Maze, and if there
 	 * is, the path is printed out.
 	 * 
 	 * @param map	Maze data structure produced by reading in the file
@@ -98,16 +99,16 @@ public class RepeatedBackwardAStar {
 		//Traverse through maze until target is reached
 		while(!start.equals(goal)){
 			aStarCount++;
-			goal.g = 0;
-			goal.h = Math.abs(start.x - goal.x) + Math.abs(start.y - goal.y);
-			goal.f = goal.g + goal.h;
-			goal.search = aStarCount;
-			start.g = Integer.MAX_VALUE;
-			start.h = 0;
+			start.g = 0;
+			start.h = Math.abs(start.x - goal.x) + Math.abs(start.y - goal.y);
+			start.f = start.g + start.h;
 			start.search = aStarCount;
-			open = new PriorityQueue<Cell>(map.grid.length * map.grid.length, new BigGComparator());
+			goal.g = Integer.MAX_VALUE;
+			goal.h = 0;
+			goal.search = aStarCount;
+			open = new PriorityQueue<Cell>(map.grid.length * map.grid.length, new BigGComparator()); 
 			closed = new LinkedList<Cell>();
-			open.add(goal);
+			open.add(start);
 			if(map.getNorth(start) != null && map.getNorth(start).blocked && !blocked.contains(map.getNorth(start))){
 				blocked.add(map.getNorth(start));
 			}
@@ -121,27 +122,27 @@ public class RepeatedBackwardAStar {
 				blocked.add(map.getWest(start));
 			}
 			
-			//Step 4: Use A* to find a path from goal to start
-			subTree = computePath(goal, start, map, open, closed, blocked, aStarCount);
+			//Step 4: Use A* to find a path from start to goal
+			subTree = computePath(start, goal, map, open, closed, blocked, aStarCount);
 			if(open.size() == 0){
 				System.out.println("Target Unreachable.");
 				return;
 			}
 			
 			//Step 5: Follow the path traced by A* to see if a conclusion has been reached
-			LinkedList<Cell> path = new LinkedList<Cell>();
-			path.add(start);
-			int index = start.x * map.grid.length + start.y;
-			while(index != goal.x * map.grid.length + goal.y){
+			Stack<Cell> path = new Stack<Cell>();
+			path.push(goal);
+			int index = goal.x * map.grid.length + goal.y;
+			while(index != start.x * map.grid.length + start.y){
 				Cell parent = subTree[index];
-				path.add(parent);
+				path.push(parent);
 				index = parent.x * map.grid.length + parent.y;
 			}
 			Cell successor = null;
-			Cell current = path.remove();
+			Cell current = path.pop();
 			while(!path.isEmpty() && !current.equals(goal) && !current.blocked){
 				successor = current;
-				current = path.remove();
+				current = path.pop();
 				//Keep track of the path that is being used to trace to target
 				if(finalPath.isEmpty() || !finalPath.contains(successor)){
 					finalPath.add(successor);
@@ -246,11 +247,23 @@ public class RepeatedBackwardAStar {
 						if(open.contains(succ)){
 							open.remove(succ);
 						}
-						succ.h = Math.abs(succ.x - goal.x) + Math.abs(succ.y - goal.y);
-						succ.f = succ.h + succ.g;
+						if(succ.hNew == Integer.MAX_VALUE){
+							succ.h = Math.abs(succ.x - goal.x) + Math.abs(succ.y - goal.y);
+							succ.f = succ.h + succ.g;
+						} else {
+							succ.f = succ.hNew + succ.g;
+						}
 						open.add(succ);
 					}
 				}
+			}
+		}
+		//Update all expanded cells' h values for Adaptive A* Search
+		if(closed.size() != 0){
+			Iterator<Cell> iter = closed.iterator();
+			while(iter.hasNext()){
+				Cell c = iter.next();
+				c.hNew = goal.g - c.g;
 			}
 		}
 		return tree; //return tree with potential path

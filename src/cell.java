@@ -13,7 +13,8 @@ public class Cell {
 	boolean blocked = false;
 	char value = '0';
 	int g = Integer.MAX_VALUE; //g-value, shortest path length from start to this cell
-	int h = 0; //h-value, heuristic for this cell --> WILL BE MANHATTAN DISTANCE TO GOAL
+	int h = Integer.MAX_VALUE; //h-value, heuristic for this cell --> WILL BE MANHATTAN DISTANCE TO GOAL
+	int hNew = Integer.MAX_VALUE; //new h-value heuristic for Adaptive A*
 	int f = g + h; //f-value, to be used to pick next OPEN cell
 	int search = 0; //search value
 	int x; //x coordinate
@@ -52,6 +53,6 @@ public class Cell {
 	}
 	
 	public String toString(){
-		return (x * 101 + y) + "";
+		return (x * 5 + y) + "";
 	}
 }
