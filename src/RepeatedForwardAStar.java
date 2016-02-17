@@ -11,7 +11,7 @@ import java.util.Stack;
  * 
  * Implementation of Repeated Forward A* 
  */
-public class Problem2 {
+public class RepeatedForwardAStar {
 	
 	public static void main(String[] args) {
 		Maze map = null; //map being searched
@@ -106,7 +106,7 @@ public class Problem2 {
 			goal.g = Integer.MAX_VALUE;
 			goal.h = 0;
 			goal.search = aStarCount;
-			open = new PriorityQueue<Cell>(map.grid.length * map.grid.length, new CellComparator());
+			open = new PriorityQueue<Cell>(map.grid.length * map.grid.length, new BigGComparator()); //SWITCH THIS TO new SmallGComparator() TO CHANGE TIE-BREAKING MECHANISM
 			closed = new LinkedList<Cell>();
 			open.add(start);
 			if(map.getNorth(start) != null && map.getNorth(start).blocked && !blocked.contains(map.getNorth(start))){

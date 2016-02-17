@@ -1,5 +1,10 @@
 import java.util.Comparator;
-
+/**
+ * Compares two cells based on f values. In the case of a tie, it returns 0.
+ *  
+ * @author Sangini
+ *
+ */
 public class CellComparator implements Comparator<Cell> {
 
 	public int compare(Cell cell1, Cell cell2){
