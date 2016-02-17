@@ -50,4 +50,8 @@ public class Cell {
 		else
 			return 0;
 	}
+	
+	public String toString(){
+		return (x * 101 + y) + "";
+	}
 }

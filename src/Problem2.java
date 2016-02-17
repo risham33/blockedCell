@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Scanner;
@@ -69,9 +70,10 @@ public class Problem2 {
 	}
 	
 	public static void repeatAStar(Maze map, Cell start, Cell goal){
-		PriorityQueue<Cell> open = null; //list of open nodes 
+ 		PriorityQueue<Cell> open = null; //list of open nodes 
 		LinkedList<Cell> closed = null; //list of closed nodes
-		Cell[] tree = null; //list of all cells' corresponding parents in a given path
+		LinkedList<Cell> finalPath = new LinkedList<Cell>(); //list of all cells' in order in the final path
+		Cell[] subTree = null; //path created through a run of A*
 		int aStarCount = 0; //number of times A* has been computed
 		ArrayList<Cell> blocked = new ArrayList<Cell>();
 		int numExpanded = 0;
@@ -85,7 +87,7 @@ public class Problem2 {
 			goal.g = Integer.MAX_VALUE;
 			goal.h = 0;
 			goal.search = aStarCount;
-			open = new PriorityQueue<Cell>(map.grid.length, new CellComparator());
+			open = new PriorityQueue<Cell>(map.grid.length * map.grid.length, new CellComparator());
 			closed = new LinkedList<Cell>();
 			open.add(start);
 			if(map.getNorth(start) != null && map.getNorth(start).blocked && !blocked.contains(map.getNorth(start))){
@@ -102,7 +104,7 @@ public class Problem2 {
 			}
 			
 			//Step 4: Use A* to find a path from start to goal
-			tree = computePath(start, goal, map, open, closed, blocked, aStarCount);
+			subTree = computePath(start, goal, map, open, closed, blocked, aStarCount);
 			if(open.size() == 0){
 				System.out.println("Target Unreachable.");
 				return;
@@ -113,19 +115,29 @@ public class Problem2 {
 			path.push(goal);
 			int index = goal.x * map.grid.length + goal.y;
 			while(index != start.x * map.grid.length + start.y){
-				Cell parent = tree[index];
+				Cell parent = subTree[index];
 				path.push(parent);
 				index = parent.x * map.grid.length + parent.y;
 			}
 			Cell successor = null;
 			Cell current = path.pop();
 			while(!path.isEmpty() && !current.equals(goal) && !current.blocked){
-				//current is a valid position on the path
-				if(!current.equals(map.getStart())){
-					current.value = '*'; //NEED TO FIX THIS
-				}
 				successor = current;
-				current = path.pop();				
+				current = path.pop();
+				if(finalPath.isEmpty() || !finalPath.contains(successor)){
+					finalPath.add(successor);
+				} else {
+					Iterator<Cell> iter = finalPath.iterator();
+					boolean foundSucc = false;
+					while(iter.hasNext()){
+						Cell c = iter.next();
+						if(c.equals(successor)){
+							foundSucc = true;
+						} else if (foundSucc){
+							iter.remove();
+						}
+					}
+				}
 			}
 			if(!current.equals(goal)){
 				if(successor != null){
@@ -133,6 +145,12 @@ public class Problem2 {
 				}
 				numExpanded += closed.size();
 			} else {
+				Iterator<Cell> iter = finalPath.iterator();
+				while(iter.hasNext()){
+					Cell c = iter.next();
+					if(!c.equals(map.getStart()))
+						c.value = '*';
+				}
 				System.out.println("Target Reached: \n");
 				System.out.println(map.toString());
 				System.out.println("Number of Expanded Cells: " + numExpanded);
@@ -144,7 +162,7 @@ public class Problem2 {
 	private static Cell[] computePath(Cell start, Cell goal, Maze map, PriorityQueue<Cell> open, LinkedList<Cell> closed, ArrayList<Cell> blocked, int counter) {
 		Cell[] tree = new Cell[map.grid.length * map.grid.length];
 		
-		while(goal.g > open.peek().f){
+		while(open.peek() != null && goal.g > open.peek().f){
 			Cell state = open.remove();
 			closed.add(state);
 			Cell north = map.getNorth(state);
@@ -175,7 +193,8 @@ public class Problem2 {
 					}
 					if(succ.g > (state.g + 1)){
 						succ.g = state.g + 1;
-						tree[succ.x * map.grid.length + succ.y] = state;
+						if(!succ.equals(tree[state.x * map.grid.length + state.y]))
+							tree[succ.x * map.grid.length + succ.y] = state;
 						if(open.contains(succ)){
 							open.remove(succ);
 						}
