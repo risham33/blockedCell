@@ -1,5 +1,5 @@
 /*
- * THIS CLASS WOULD BE USED TO HOLD THE GENERATED 2D ARRAY OF THE dataStructure object
+ * THIS CLASS WOULD BE USED TO HOLD THE GENERATED 2D ARRAY OF THE Cell object
  */
 public class Maze {
 	

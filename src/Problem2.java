@@ -6,7 +6,11 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Stack;
-
+/*
+ * Sangini Shah (sms591) and Risham Chokshi (ryc19)
+ * 
+ * Implementation of Repeated Forward A* 
+ */
 public class Problem2 {
 	
 	public static void main(String[] args) {
@@ -25,11 +29,16 @@ public class Problem2 {
 
 	}
 	
+	/**
+	 * Reads in the maze from the file and maps it into the Maze data structure
+	 * 
+	 * @return map	the maze generated from the file 
+	 */
 	public static Maze readMaze(){
 		Scanner scan = new Scanner(System.in);
 		System.out.print("Enter maze file name: ");
 		String file = scan.nextLine();
-		System.out.print("Enter n (number of rows or columns): n = ");
+		System.out.print("Enter n (number of rows or columns): n = "); //Typically n=101 but kept line for debugging purposes
 		int n = scan.nextInt();
 		scan.close();
 		
@@ -69,15 +78,25 @@ public class Problem2 {
 		} 
 	}
 	
+	/**
+	 * Driver method that runs A* with different start states depending on the path returned by computePath(). 
+	 * Initially begins with the start position in the map. Outputs whether or not there is a solution for the Maze, and if there
+	 * is, the path is printed out.
+	 * 
+	 * @param map	Maze data structure produced by reading in the file
+	 * @param start	Start position in the map
+	 * @param goal	Finish position in the map
+	 */
 	public static void repeatAStar(Maze map, Cell start, Cell goal){
  		PriorityQueue<Cell> open = null; //list of open nodes 
 		LinkedList<Cell> closed = null; //list of closed nodes
 		LinkedList<Cell> finalPath = new LinkedList<Cell>(); //list of all cells' in order in the final path
 		Cell[] subTree = null; //path created through a run of A*
 		int aStarCount = 0; //number of times A* has been computed
-		ArrayList<Cell> blocked = new ArrayList<Cell>();
-		int numExpanded = 0;
+		ArrayList<Cell> blocked = new ArrayList<Cell>(); //cells we have knowledge of being blocked
+		int numExpanded = 0; //total number of cells that have been expanded
 		
+		//Traverse through maze until target is reached
 		while(!start.equals(goal)){
 			aStarCount++;
 			start.g = 0;
@@ -124,9 +143,12 @@ public class Problem2 {
 			while(!path.isEmpty() && !current.equals(goal) && !current.blocked){
 				successor = current;
 				current = path.pop();
+				//Keep track of the path that is being used to trace to target
 				if(finalPath.isEmpty() || !finalPath.contains(successor)){
 					finalPath.add(successor);
 				} else {
+					//Cell is already in the path, implying that the route through it is being rerouted. 
+					//Wipe all of the nodes resulting from that node so the new path originating from the state can be traced
 					Iterator<Cell> iter = finalPath.iterator();
 					boolean foundSucc = false;
 					while(iter.hasNext()){
@@ -139,12 +161,15 @@ public class Problem2 {
 					}
 				}
 			}
+			//Some cell on determined path was blocked. Set start point to be the one preceding it and redo A*
 			if(!current.equals(goal)){
 				if(successor != null){
 					start = successor;
 				}
-				numExpanded += closed.size();
-			} else {
+				numExpanded += closed.size(); //count number of expanded nodes
+			} 
+			//Found the path! Print out the route
+			else { 
 				Iterator<Cell> iter = finalPath.iterator();
 				while(iter.hasNext()){
 					Cell c = iter.next();
@@ -159,9 +184,29 @@ public class Problem2 {
 		}
 	}
 
+	/**
+	 * This is the A* algorithm that traces a path from the given start position to the given goal with the known information of the Maze.
+	 * 
+	 * @param start	Start state
+	 * @param goal	End state
+	 * @param map	Maze being solved
+	 * @param open	Priority Queue of open cells ordered via a Cell Comparator
+	 * @param closed	List of closed/expanded nodes
+	 * @param blocked	List of all the cells we currently know to be blocked in the maze
+	 * @param counter	Count of which A* search we are running
+	 * @return subTree	Array that keeps track of the parent pointers of all cells explored in this A* search		
+	 */
 	private static Cell[] computePath(Cell start, Cell goal, Maze map, PriorityQueue<Cell> open, LinkedList<Cell> closed, ArrayList<Cell> blocked, int counter) {
+		/*
+		 * This tree is maintained as an array in order to save lookup times. The index, identifying the child node, is calculated
+		 * by using the equation x*n + y where (x,y) are the cell coordinates and n is the dimension of the grid. The cell found at
+		 * tree[x*n + y] would be the parent of cell (x,y).
+		 * For example:
+		 * 	Cell (3,4) on a 5 by 5 grid has parent cell temp <=> tree[19] = temp  
+		 */
 		Cell[] tree = new Cell[map.grid.length * map.grid.length];
 		
+		//Run until goal is found or there are no more open cells to expand
 		while(open.peek() != null && goal.g > open.peek().f){
 			Cell state = open.remove();
 			closed.add(state);
@@ -171,6 +216,7 @@ public class Problem2 {
 			Cell west = map.getWest(state);
 			Cell[] actions = new Cell[4];
 			
+			//Check which actions are valid and add them to the list
 			if(north != null && !blocked.contains(north)){
 				actions[0] = north;
 			}
@@ -187,13 +233,15 @@ public class Problem2 {
 			for(int i = 0; i < 4; i++){
 				Cell succ = actions[i];
 				if(succ != null){
+					//Cell has not be explored yet
 					if(succ.search < counter){
 						succ.g = Integer.MAX_VALUE;
 						succ.search = counter;
 					}
+					//Shorter path found to succ
 					if(succ.g > (state.g + 1)){
 						succ.g = state.g + 1;
-						if(!succ.equals(tree[state.x * map.grid.length + state.y]))
+						if(!succ.equals(tree[state.x * map.grid.length + state.y])) //make sure to avoid loops in tree
 							tree[succ.x * map.grid.length + succ.y] = state;
 						if(open.contains(succ)){
 							open.remove(succ);
@@ -205,7 +253,7 @@ public class Problem2 {
 				}
 			}
 		}
-		return tree;
+		return tree; //return tree with potential path
 	}
 
 }
