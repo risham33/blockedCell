@@ -171,6 +171,7 @@ public class RepeatedBackwardAStar {
 			} 
 			//Found the path! Print out the route
 			else { 
+				numExpanded += closed.size();
 				Iterator<Cell> iter = finalPath.iterator();
 				while(iter.hasNext()){
 					Cell c = iter.next();
