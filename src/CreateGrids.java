@@ -21,25 +21,11 @@ public class CreateGrids {
 			if (x >= 0 && x < grid.length && y + 1 >= 0 && y + 1 < grid.length
 					&& grid[x][y + 1].visited != true)
 				initialize_grid(x, y + 1);
-			if (x + 1 >= 0 && x + 1 < grid.length && y + 1 >= 0
-					&& y + 1 < grid.length
-					&& grid[x + 1][y + 1].visited != true)
-				initialize_grid(x + 1, y + 1);
-			if (x + 1 >= 0 && x + 1 < grid.length && y - 1 >= 0
-					&& y - 1 < grid.length
-					&& grid[x + 1][y - 1].visited != true)
-				initialize_grid(x + 1, y - 1);
+
 			if (x + 1 >= 0 && x + 1 < grid.length && y >= 0 && y < grid.length
 					&& grid[x + 1][y].visited != true)
 				initialize_grid(x + 1, y);
-			if (x - 1 >= 0 && x - 1 < grid.length && y - 1 >= 0
-					&& y - 1 < grid.length
-					&& grid[x - 1][y - 1].visited != true)
-				initialize_grid(x - 1, y - 1);
-			if (x - 1 >= 0 && x - 1 < grid.length && y + 1 >= 0
-					&& y + 1 < grid.length
-					&& grid[x - 1][y + 1].visited != true)
-				initialize_grid(x - 1, y + 1);
+
 			if (x - 1 >= 0 && x - 1 < grid.length && y >= 0 && y < grid.length
 					&& grid[x - 1][y].visited != true)
 				initialize_grid(x - 1, y);
