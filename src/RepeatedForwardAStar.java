@@ -21,6 +21,10 @@ public class RepeatedForwardAStar {
 		//Step 1: read in the maze
 		map = readMaze();
 		
+		if(map == null){
+			throw new NullPointerException("Null Maze Returned. Check if entered file name and n-value are correct.");
+		}
+		
 		start = map.getStart();
 		goal = map.getFinish();
 		
@@ -73,7 +77,7 @@ public class RepeatedForwardAStar {
 		   return m;
 		}
 		catch(Exception e){
-			System.out.println("error");
+			System.out.println("Error in Reading Maze.");
 			return null;
 		} 
 	}

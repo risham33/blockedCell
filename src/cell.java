@@ -1,5 +1,3 @@
-import java.util.Comparator;
-
 /*
  * Sangini Shah (sms591) and Risham Chokshi (ryc19)
  * 
