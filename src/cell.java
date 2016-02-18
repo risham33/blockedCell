@@ -53,6 +53,6 @@ public class Cell {
 	}
 	
 	public String toString(){
-		return (x * 5 + y) + "";
+		return (x * 101 + y) + "";
 	}
 }
