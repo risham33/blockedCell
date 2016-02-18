@@ -21,6 +21,10 @@ public class AdaptiveAStar {
 		//Step 1: read in the maze
 		map = readMaze();
 		
+		if(map == null){
+			throw new NullPointerException("Null Maze Returned. Check if entered file name and n-value are correct.");
+		}
+		
 		start = map.getStart();
 		goal = map.getFinish();
 		
@@ -69,11 +73,11 @@ public class AdaptiveAStar {
 		   	  }
 			  x++; //the x value increases
 		   }
-		   System.out.println(m.toString()); //printout of the map
+		   //System.out.println(m.toString()); //printout of the map
 		   return m;
 		}
 		catch(Exception e){
-			System.out.println("error");
+			System.out.println("Error in Reading Maze.");
 			return null;
 		} 
 	}
@@ -125,7 +129,10 @@ public class AdaptiveAStar {
 			//Step 4: Use A* to find a path from start to goal
 			subTree = computePath(start, goal, map, open, closed, blocked, aStarCount);
 			if(open.size() == 0){
+				numExpanded += closed.size();
+				System.out.println(map.toString());
 				System.out.println("Target Unreachable.");
+				System.out.println("Number of Expanded Cells: " + numExpanded);
 				return;
 			}
 			
@@ -177,8 +184,8 @@ public class AdaptiveAStar {
 					if(!c.equals(map.getStart()))
 						c.value = '*';
 				}
-				System.out.println("Target Reached: \n");
 				System.out.println(map.toString());
+				System.out.println("Target Reached. See map above for generated route.");
 				System.out.println("Number of Expanded Cells: " + numExpanded);
 				return;
 			}

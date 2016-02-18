@@ -44,6 +44,7 @@ public class RepeatedForwardAStar {
 		String file = scan.nextLine();
 		System.out.print("Enter n (number of rows or columns): n = "); //Typically n=101 but kept line for debugging purposes
 		int n = scan.nextInt();
+		System.out.println();
 		scan.close();
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -73,7 +74,7 @@ public class RepeatedForwardAStar {
 		   	  }
 			  x++; //the x value increases
 		   }
-		   System.out.println(m.toString()); //printout of the map
+		   //System.out.println(m.toString()); //printout of the map
 		   return m;
 		}
 		catch(Exception e){
@@ -129,7 +130,11 @@ public class RepeatedForwardAStar {
 			//Step 4: Use A* to find a path from start to goal
 			subTree = computePath(start, goal, map, open, closed, blocked, aStarCount);
 			if(open.size() == 0){
+				numExpanded += closed.size();
+				System.out.println(map.toString());
 				System.out.println("Target Unreachable.");
+				System.out.println("Number of Expanded Cells: " + numExpanded);
+				
 				return;
 			}
 			
@@ -181,8 +186,8 @@ public class RepeatedForwardAStar {
 					if(!c.equals(map.getStart()))
 						c.value = '*';
 				}
-				System.out.println("Target Reached: \n");
 				System.out.println(map.toString());
+				System.out.println("Target Reached. See map above for generated route.");
 				System.out.println("Number of Expanded Cells: " + numExpanded);
 				return;
 			}
