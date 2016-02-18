@@ -1,4 +1,6 @@
 /*
+ * Sangini Shah (sms591) and Risham Chokshi (ryc19)
+ * 
  * THIS CLASS WOULD BE USED TO HOLD THE GENERATED 2D ARRAY OF THE Cell object
  */
 public class Maze {

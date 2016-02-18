@@ -1,5 +1,7 @@
 import java.util.Comparator;
 /**
+ * Sangini Shah (sms591) and Risham Chokshi (ryc19)
+ * 
  * Compares two cells based on f values. In the case of a tie, it returns 0.
  *  
  * @author Sangini
