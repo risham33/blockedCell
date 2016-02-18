@@ -74,7 +74,17 @@ public class CreateGrids {
 			// started in initializing the values of it with the 30% blocked
 			grid = list[i].grid;
 			initialize_grid(x, y);
-
+			for(int o=0; o<grid.length;o++){
+				for(int k=0; k<grid[o].length;k++){
+					if(grid[o][k].visited != true){
+					if (((int) Math.floor(Math.random() * 101)) <= 30) {
+						grid[x][y].blocked = true;
+						grid[x][y].value = '1';
+						}
+					grid[o][k].visited = true;
+					}
+				}
+			}
 			/*
 			 * TO PRINT OUT THE CELL WHICH WAS CREATED!!!!!!, YOU CAN GET RID OF
 			 * THIS IF YOU WOULD LIKE
